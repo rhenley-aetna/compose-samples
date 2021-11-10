@@ -16,6 +16,7 @@
 
 package com.example.jetcaster.ui.home.category
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -152,7 +153,10 @@ fun EpisodeListItem(
     onClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ConstraintLayout(modifier = modifier.clickable { onClick(episode.uri) }) {
+    ConstraintLayout(modifier = modifier.clickable {
+        Log.d("RAH", "ConstraintLayout.clickable")
+        onClick(episode.uri)
+    }) {
         val (
             divider, episodeTitle, podcastTitle, image, playIcon,
             date, addPlaylist, overflow
@@ -235,7 +239,7 @@ fun EpisodeListItem(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false, radius = 24.dp)
-                ) { /* TODO */ }
+                ) { Log.d("RAH", "PlayCircleFilled.clickable"); /* TODO */ }
                 .size(48.dp)
                 .padding(6.dp)
                 .semantics { role = Role.Button }
@@ -277,7 +281,7 @@ fun EpisodeListItem(
             )
 
             IconButton(
-                onClick = { /* TODO */ },
+                onClick = { Log.d("RAH", "IconButton Add .onClick"); /* TODO */ },
                 modifier = Modifier.constrainAs(addPlaylist) {
                     end.linkTo(overflow.start)
                     centerVerticallyTo(playIcon)
@@ -290,7 +294,7 @@ fun EpisodeListItem(
             }
 
             IconButton(
-                onClick = { /* TODO */ },
+                onClick = { Log.d("RAH", "IconButton More .onClick");/* TODO */ },
                 modifier = Modifier.constrainAs(overflow) {
                     end.linkTo(parent.end, 8.dp)
                     centerVerticallyTo(playIcon)
