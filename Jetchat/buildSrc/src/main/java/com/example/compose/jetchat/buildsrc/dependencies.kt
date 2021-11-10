@@ -17,7 +17,7 @@
 package com.example.compose.jetchat.buildsrc
 
 object Versions {
-    const val ktlint = "0.42.1"
+    const val ktlint = "0.43.0"
 }
 
 object Libs {
@@ -26,10 +26,10 @@ object Libs {
 
     const val junit = "junit:junit:4.13"
 
-    const val material = "com.google.android.material:material:1.3.0"
+    const val material3 = "com.google.android.material:material:1.5.0-alpha05"
 
     object Accompanist {
-        const val version = "0.20.0"
+        const val version = "0.21.2-beta"
         const val insets = "com.google.accompanist:accompanist-insets:$version"
     }
 
@@ -49,15 +49,15 @@ object Libs {
 
     object AndroidX {
         const val appcompat = "androidx.appcompat:appcompat:1.3.0"
-        const val coreKtx = "androidx.core:core-ktx:1.6.0"
+        const val coreKtx = "androidx.core:core-ktx:1.7.0"
 
         object Activity {
-            const val activityCompose = "androidx.activity:activity-compose:1.3.1"
+            const val activityCompose = "androidx.activity:activity-compose:1.4.0"
         }
 
         object Compose {
             const val snapshot = ""
-            const val version = "1.0.4"
+            const val version = "1.1.0-beta02"
 
             const val foundation = "androidx.compose.foundation:foundation:$version"
             const val layout = "androidx.compose.foundation:foundation-layout:$version"
@@ -71,6 +71,13 @@ object Libs {
             const val uiTestManifest = "androidx.compose.ui:ui-test-manifest:$version"
             const val uiUtil = "androidx.compose.ui:ui-util:${version}"
             const val viewBinding = "androidx.compose.ui:ui-viewbinding:$version"
+
+            object Material3 {
+                const val snapshot = ""
+                const val version = "1.0.0-alpha01"
+
+                const val material3 = "androidx.compose.material3:material3:$version"
+            }
         }
 
         object Navigation {
@@ -93,7 +100,7 @@ object Libs {
         }
 
         object Lifecycle {
-            private const val version = "2.4.0-rc01"
+            private const val version = "2.4.0"
             const val extensions = "androidx.lifecycle:lifecycle-extensions:$version"
             const val livedata = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
             const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
@@ -105,5 +112,7 @@ object Libs {
 object Urls {
     const val composeSnapshotRepo = "https://androidx.dev/snapshots/builds/" +
         "${Libs.AndroidX.Compose.snapshot}/artifacts/repository/"
+    const val composeMaterial3SnapshotRepo = "https://androidx.dev/snapshots/builds/" +
+            "${Libs.AndroidX.Compose.Material3.snapshot}/artifacts/repository/"
     const val accompanistSnapshotRepo = "https://oss.sonatype.org/content/repositories/snapshots"
 }
