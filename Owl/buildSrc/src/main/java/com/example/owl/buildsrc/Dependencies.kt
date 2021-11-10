@@ -57,7 +57,7 @@ object Libs {
 
         object Compose {
             const val snapshot = ""
-            const val version = "1.0.4"
+            const val version = "1.1.0-beta02"//"1.0.4"
 
             const val animation = "androidx.compose.animation:animation:$version"
             const val foundation = "androidx.compose.foundation:foundation:$version"
