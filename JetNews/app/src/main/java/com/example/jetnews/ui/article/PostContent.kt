@@ -56,6 +56,7 @@ import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ParagraphStyle
@@ -102,7 +103,11 @@ fun LazyListScope.postContentItems(post: Post) {
         PostHeaderImage(post)
     }
     item {
-        Text(text = post.title, style = MaterialTheme.typography.h4)
+        Text(
+            text = post.title,
+            modifier = Modifier.semantics { heading() },
+            style = MaterialTheme.typography.h4
+        )
         Spacer(Modifier.height(8.dp))
     }
     post.subtitle?.let { subtitle ->
