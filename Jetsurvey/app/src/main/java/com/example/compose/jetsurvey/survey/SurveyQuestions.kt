@@ -16,11 +16,9 @@
 
 package com.example.compose.jetsurvey.survey
 
+import android.view.KeyEvent
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,6 +33,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
@@ -63,8 +62,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -354,8 +355,10 @@ private fun SingleChoiceQuestion(
                         .fillMaxWidth()
                         .selectable(
                             selected = optionSelected,
+                            role = Role.RadioButton,
                             onClick = onClickHandle
                         )
+//                        .focusable()
                         .background(answerBackgroundColor)
                         .padding(vertical = 16.dp, horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -367,7 +370,8 @@ private fun SingleChoiceQuestion(
 
                     RadioButton(
                         selected = optionSelected,
-                        onClick = onClickHandle,
+//                        onClick = onClickHandle,
+                        onClick = null,
                         colors = RadioButtonDefaults.colors(
                             selectedColor = MaterialTheme.colors.primary
                         )
@@ -428,6 +432,7 @@ private fun SingleChoiceIconQuestion(
                         .fillMaxWidth()
                         .selectable(
                             selected = optionSelected,
+                            role = Role.RadioButton,
                             onClick = onClickHandle
                         )
                         .background(answerBackgroundColor)
@@ -453,7 +458,8 @@ private fun SingleChoiceIconQuestion(
 
                     RadioButton(
                         selected = optionSelected,
-                        onClick = onClickHandle,
+//                        onClick = onClickHandle,
+                        onClick = null,
                         colors = RadioButtonDefaults.colors(
                             selectedColor = MaterialTheme.colors.primary
                         )
@@ -500,12 +506,31 @@ private fun MultipleChoiceQuestion(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(answerBackgroundColor)
-                        .clickable(
-                            onClick = {
-                                checkedState = !checkedState
-                                onAnswerSelected(option.value, checkedState)
+                        .toggleable(
+                            value = checkedState,
+                            role = Role.Checkbox
+                        ) { checked ->
+                            checkedState = checked
+                            onAnswerSelected(option.value, checkedState)
+                        }
+                        .onKeyEvent {
+                            it.type == KeyEventType.KeyUp && when (it.key.nativeKeyCode) {
+                                KeyEvent.KEYCODE_DPAD_CENTER,
+                                KeyEvent.KEYCODE_ENTER,
+                                KeyEvent.KEYCODE_NUMPAD_ENTER -> {
+                                    checkedState = !checkedState
+                                    onAnswerSelected(option.value, checkedState)
+                                    true
+                                }
+                                else -> false
                             }
-                        )
+                        }
+//                        .clickable(
+//                            onClick = {
+//                                checkedState = !checkedState
+//                                onAnswerSelected(option.value, checkedState)
+//                            }
+//                        )
                         .padding(vertical = 16.dp, horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -514,13 +539,14 @@ private fun MultipleChoiceQuestion(
 
                     Checkbox(
                         checked = checkedState,
-                        onCheckedChange = { selected ->
-                            checkedState = selected
-                            onAnswerSelected(option.value, selected)
-                        },
+//                        onCheckedChange = { selected ->
+//                            checkedState = selected
+//                            onAnswerSelected(option.value, selected)
+//                        },
+                        onCheckedChange = null,
                         colors = CheckboxDefaults.colors(
-                            checkedColor = MaterialTheme.colors.primary
-                        ),
+                            checkedColor = MaterialTheme.colors.primary,
+                        )
                     )
                 }
             }
@@ -563,12 +589,31 @@ private fun MultipleChoiceIconQuestion(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable(
-                            onClick = {
-                                checkedState = !checkedState
-                                onAnswerSelected(option.value.second, checkedState)
+                        .toggleable(
+                            value = checkedState,
+                            role = Role.Checkbox
+                        ) { checked ->
+                            checkedState = checked
+                            onAnswerSelected(option.value.second, checkedState)
+                        }
+                        .onKeyEvent {
+                            it.type == KeyEventType.KeyUp && when (it.key.nativeKeyCode) {
+                                KeyEvent.KEYCODE_DPAD_CENTER,
+                                KeyEvent.KEYCODE_ENTER,
+                                KeyEvent.KEYCODE_NUMPAD_ENTER -> {
+                                    checkedState = !checkedState
+                                    onAnswerSelected(option.value.second, checkedState)
+                                    true
+                                }
+                                else -> false
                             }
-                        )
+                        }
+//                        .clickable(
+//                            onClick = {
+//                                checkedState = !checkedState
+//                                onAnswerSelected(option.value.second, checkedState)
+//                            }
+//                        )
                         .background(answerBackgroundColor)
                         .padding(vertical = 16.dp, horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -586,10 +631,11 @@ private fun MultipleChoiceIconQuestion(
 
                     Checkbox(
                         checked = checkedState,
-                        onCheckedChange = { selected ->
-                            checkedState = selected
-                            onAnswerSelected(option.value.second, selected)
-                        },
+//                        onCheckedChange = { selected ->
+//                            checkedState = selected
+//                            onAnswerSelected(option.value.second, selected)
+//                        },
+                        onCheckedChange = null,
                         colors = CheckboxDefaults.colors(
                             checkedColor = MaterialTheme.colors.primary
                         ),

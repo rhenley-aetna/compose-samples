@@ -16,6 +16,7 @@
 
 package com.example.compose.jetsurvey.signinsignup
 
+import android.view.KeyEvent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,8 +52,12 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.key.*
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -118,12 +123,14 @@ fun SignInSignUpTopAppBar(topAppBarText: String, onBackPressed: () -> Unit) {
     )
 }
 
+//@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Email(
     emailState: TextFieldState = remember { EmailState() },
     imeAction: ImeAction = ImeAction.Next,
     onImeAction: () -> Unit = {}
 ) {
+    val focusManager = LocalFocusManager.current
     OutlinedTextField(
         value = emailState.text,
         onValueChange = {
@@ -144,11 +151,40 @@ fun Email(
                 if (!focusState.isFocused) {
                     emailState.enableShowErrors()
                 }
+            }
+//            .onKeyEvent {
+//                if (it.key.keyCode == Key.Tab.keyCode){
+//                    focusManager.moveFocus(FocusDirection.Next)
+//                    true
+//                } else {
+//                    false
+//                }
+//            }
+            .onKeyEvent {
+                if (it.type == KeyEventType.KeyUp) {
+                    if (it.isShiftPressed && it.key.nativeKeyCode == KeyEvent.KEYCODE_TAB) {
+                        focusManager.moveFocus(FocusDirection.Previous)
+                        true
+                    } else {
+                        when (it.key.nativeKeyCode) {
+                            KeyEvent.KEYCODE_TAB,
+                            KeyEvent.KEYCODE_ENTER,
+                            KeyEvent.KEYCODE_NUMPAD_ENTER -> {
+                                focusManager.moveFocus(FocusDirection.Next)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                } else {
+                    false
+                }
             },
         textStyle = MaterialTheme.typography.body2,
         isError = emailState.showErrors(),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = imeAction),
         keyboardActions = KeyboardActions(
+//            onNext = {focusManager.moveFocus(FocusDirection.Next)},
             onDone = {
                 onImeAction()
             }
@@ -158,6 +194,7 @@ fun Email(
     emailState.getError()?.let { error -> TextFieldError(textError = error) }
 }
 
+//@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Password(
     label: String,
@@ -167,6 +204,7 @@ fun Password(
     onImeAction: () -> Unit = {}
 ) {
     val showPassword = remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
     OutlinedTextField(
         value = passwordState.text,
         onValueChange = {
@@ -179,6 +217,34 @@ fun Password(
                 passwordState.onFocusChange(focusState.isFocused)
                 if (!focusState.isFocused) {
                     passwordState.enableShowErrors()
+                }
+            }
+//            .onKeyEvent {
+//                if (it.key.keyCode == Key.Tab.keyCode){
+//                    focusManager.moveFocus(FocusDirection.Next)
+//                    true
+//                } else {
+//                    false
+//                }
+//            }
+            .onKeyEvent {
+                if (it.type == KeyEventType.KeyUp) {
+                    if (it.isShiftPressed && it.key.nativeKeyCode == KeyEvent.KEYCODE_TAB) {
+                        focusManager.moveFocus(FocusDirection.Previous)
+                        true
+                    } else {
+                        when (it.key.nativeKeyCode) {
+                            KeyEvent.KEYCODE_TAB,
+                            KeyEvent.KEYCODE_ENTER,
+                            KeyEvent.KEYCODE_NUMPAD_ENTER -> {
+                                focusManager.moveFocus(FocusDirection.Next)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                } else {
+                    false
                 }
             },
         textStyle = MaterialTheme.typography.body2,
@@ -215,6 +281,7 @@ fun Password(
         isError = passwordState.showErrors(),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = imeAction),
         keyboardActions = KeyboardActions(
+//            onNext = {focusManager.moveFocus(FocusDirection.Next)},
             onDone = {
                 onImeAction()
             }
