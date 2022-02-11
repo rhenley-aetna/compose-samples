@@ -91,7 +91,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.1.0-rc02' // For Kotlin 1.6.10. Revert with rc03
+        kotlinCompilerExtensionVersion Libs.AndroidX.Compose.version
     }
 
     packagingOptions {
@@ -123,8 +123,9 @@ dependencies {
     implementation Libs.AndroidX.Compose.material
     implementation Libs.AndroidX.Compose.layout
     implementation Libs.AndroidX.Compose.animation
-    implementation Libs.AndroidX.Compose.tooling
+    implementation Libs.AndroidX.Compose.toolingPreview
     implementation Libs.AndroidX.Lifecycle.viewModelCompose
+    debugImplementation Libs.AndroidX.Compose.tooling
 
     implementation Libs.AndroidX.Lifecycle.viewModelKtx
     implementation Libs.Hilt.android
